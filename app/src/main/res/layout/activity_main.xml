@@ -57,7 +57,7 @@
         android:id="@+id/countImageCapture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#F7C229"
+        android:textColor="@android:color/black"
         android:textSize="40sp"
         android:visibility="invisible" />
 
@@ -65,7 +65,7 @@
         android:id="@+id/countDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="80sp"
         android:visibility="invisible" />
 

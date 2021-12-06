@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         val cameraView = CameraView()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, cameraView, CameraView::class.toString())
-            .addToBackStack(null)
+            //.addToBackStack(null)
             .commit()
 
         vb.switchCamera.setOnClickListener {
