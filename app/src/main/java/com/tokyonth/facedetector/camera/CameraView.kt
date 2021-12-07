@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.tokyonth.facedetector.databinding.FragmentCameraBinding
+import com.tokyonth.facedetector.utils.lazyBind
 import com.tokyonth.facedetector.view.onSurfaceListener
 import com.tokyonth.facedetector.view.setRoundOutlineProvider
 
@@ -15,7 +16,7 @@ import com.tokyonth.facedetector.view.setRoundOutlineProvider
  */
 class CameraView : Fragment() {
 
-    private lateinit var vb: FragmentCameraBinding
+    private val vb: FragmentCameraBinding by lazyBind()
     private var iCamera: ICamera? = null
 
     override fun onCreateView(
@@ -23,7 +24,6 @@ class CameraView : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        vb = FragmentCameraBinding.inflate(LayoutInflater.from(requireContext()))
         initView()
         return vb.root
     }

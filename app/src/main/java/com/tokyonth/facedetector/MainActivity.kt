@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
@@ -15,19 +14,21 @@ import com.tokyonth.facedetector.camera.CameraView
 import com.tokyonth.facedetector.camera.ICamera
 import com.tokyonth.facedetector.databinding.ActivityMainBinding
 import com.tokyonth.facedetector.utils.FileUtils
+import com.tokyonth.facedetector.utils.delay
+import com.tokyonth.facedetector.utils.lazyBind
+import com.tokyonth.facedetector.utils.onUI
 import com.tokyonth.facedetector.utils.permission.PermissionUtil
 import com.tokyonth.facedetector.widget.PhotoDialog
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var vb: ActivityMainBinding
+    private val vb: ActivityMainBinding by lazyBind()
 
     private var countImage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vb = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(vb.root)
 
         PermissionUtil(this).request(
@@ -44,25 +45,23 @@ class MainActivity : AppCompatActivity() {
     private val takePictureCallbacks = object : ICamera.CaptureImageCallbacks {
 
         override fun captureSucceeded(picture: Bitmap) {
-
-            runOnUiThread {
+            onUI {
                 vb.countImageCapture.visibility = View.INVISIBLE
                 PhotoDialog(this@MainActivity).apply {
                     setPhoto(picture)
                 }.show()
             }
-
         }
 
         override fun captureBurstSucceeded(picture: Bitmap?, sessionBurstFinished: Boolean) {
-            runOnUiThread {
+            onUI {
                 vb.countImageCapture.visibility = View.VISIBLE
                 countImage++
                 vb.countImageCapture.text = countImage.toString()
                 if (sessionBurstFinished) {
-                    Handler(Looper.myLooper()!!).postDelayed({
+                    delay(300) {
                         vb.countImageCapture.visibility = View.INVISIBLE
-                    }, 300)
+                    }
                     Toast.makeText(
                         applicationContext,
                         "Session capture burst completed",
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun countDownTimerCaptureWithDelay(time: Long, ended: Boolean) {
-            runOnUiThread {
+            onUI {
                 if (ended) {
                     vb.countDown.visibility = View.INVISIBLE
                 } else {
@@ -104,7 +103,6 @@ class MainActivity : AppCompatActivity() {
 
         vb.capture.setOnClickListener {
             cameraView.capture(takePictureCallbacks)
-
         }
 
         /****************************** Burst **********************************************/
@@ -112,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         vb.burst.setOnLongClickListener {
             countImage = 0
             cameraView.captureBurst(takePictureCallbacks)
-
             true
         }
 
@@ -125,7 +122,6 @@ class MainActivity : AppCompatActivity() {
                     }, 300)
                 }
             }
-
             false
         }
 
